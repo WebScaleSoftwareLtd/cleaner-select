@@ -53,3 +53,23 @@ Each option inside your select can also have an additional `data-description` at
 </select>
 ```
 ![description preview](https://i.imgur.com/oFN0Yc4.png)
+
+## Hotwired Example
+
+Yes, we are not kidding. It is this simple to get working with Hotwired:
+```js
+import { Controller } from "@hotwired/stimulus"
+import { mount } from "cleaner-select"
+
+// Connects to data-controller="select"
+export default class extends Controller {
+  connect() {
+    this.destructor = mount(this.element)
+  }
+
+  disconnect() {
+    this.destructor()
+  }
+}
+```
+If you are using import maps in Rails, make sure to pin `cleaner-select`. Boom!
