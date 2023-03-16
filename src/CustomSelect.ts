@@ -25,6 +25,8 @@ export default class CustomSelect {
     private dropdownOverride: HTMLElement | undefined;
     private keyEv: any;
     private clickEv: any;
+    private globalClickEv: any;
+    private globalKeyEv: any;
     private ariaPopupBackup: string | null;
 
     constructor(
@@ -37,6 +39,12 @@ export default class CustomSelect {
         this.parent.addEventListener("keydown", this.keyEv);
         this.clickEv = this.onSelectClick.bind(this);
         this.parent.addEventListener("mousedown", this.clickEv);
+
+        // Globally hook clicks or key downs to check if its outside the dropdown.
+        this.globalClickEv = this.onGlobalClickOrKey.bind(this);
+        document.addEventListener("mousedown", this.globalClickEv);
+        this.globalKeyEv = this.onGlobalClickOrKey.bind(this);
+        document.addEventListener("keydown", this.globalKeyEv);
 
         // Backup the original aria popup value.
         this.ariaPopupBackup = this.parent.getAttribute("aria-haspopup");
@@ -57,6 +65,16 @@ export default class CustomSelect {
             this.dropdownOverride.remove();
             this.dropdownOverride = undefined;
         }
+    }
+
+    private onGlobalClickOrKey(e: Event) {
+        if (!this.dropdownOverride) return;
+        let el = e.target as HTMLElement | null;
+        while (el) {
+            if (el === this.dropdownOverride || el === this.parent) return;
+            el = el.parentElement;
+        }
+        this.halfKill();
     }
 
     private searchInput(e?: Event) {
@@ -159,8 +177,8 @@ export default class CustomSelect {
                     top = topAttempt;
                 }
             } else {
-                // Do like 2px of margin on the top.
-                top += 2;
+                // Do like 5px of margin on the top.
+                top += 5;
             }
             styles.top = `${top}px`;
         }
@@ -389,6 +407,8 @@ ${this.themeType === "dark" ? darkInput : ""}
         // Remove the key down and click events.
         this.parent.removeEventListener("keydown", this.keyEv);
         this.parent.removeEventListener("mousedown", this.clickEv);
+        document.removeEventListener("mousedown", this.globalClickEv);
+        document.removeEventListener("keydown", this.globalKeyEv);
 
         // Remove the dropdown override and resize observer.
         this.halfKill();
