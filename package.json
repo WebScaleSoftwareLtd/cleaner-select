@@ -1,11 +1,19 @@
 {
   "name": "cleaner-select",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A much cleaner select menu.",
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
+  "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "browser": "./dist/index.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "type": "module",
   "repository": "https://github.com/webscalesoftwareltd/cleaner-select.git",
   "author": "Web Scale Software Ltd",
