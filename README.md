@@ -56,7 +56,7 @@ Each option inside your select can also have an additional `data-description` at
 
 ## Hotwired Example
 
-Yes, we are not kidding. It is this simple to get working with Hotwired:
+It is this simple to get working with Hotwired:
 ```js
 import { Controller } from "@hotwired/stimulus"
 import { mount } from "cleaner-select"
